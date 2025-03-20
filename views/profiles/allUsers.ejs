@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Users</title>
+</head>
+<body>
+    <%- include('../partials/_navbar.ejs') %>
+
+    <h1>All Users</h1>
+
+    <% users.forEach(profileUser => { %>
+        <div>
+            <% if (profileUser.profilePic) { %>
+                <img src="<%= profileUser.profilePic %>" alt="Profile Picture" width="50">
+            <% } %>
+            <p><a href="/users/<%= profileUser._id %>"><%= profileUser.username %></a></p>
+
+            <% if (user && user._id !== profileUser._id) { %>
+                <form action="/users/<%= profileUser._id %>/follow" method="POST">
+                    <button type="submit">
+                        <% if (user.following && user.following.some(followingUser => followingUser.toString() === profileUser._id.toString())) { %> 
+                            Unfollow 
+                        <% } else { %> 
+                            Follow 
+                        <% } %>
+                    </button>
+                </form>
+            <% } %>
+        </div>
+    <% }) %>
+</body>
+</html>
