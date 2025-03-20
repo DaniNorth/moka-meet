@@ -20,7 +20,7 @@
             <% if (user && user._id !== profileUser._id) { %>
                 <form action="/users/<%= profileUser._id %>/follow" method="POST">
                     <button type="submit">
-                        <% if (user.following && user.following.some(followingUser => followingUser.toString() === profileUser._id.toString())) { %> 
+                        <% if (user.following && user.following.some(followingUser => followingUser._id.toString() === profileUser._id.toString())) { %> 
                             Unfollow 
                         <% } else { %> 
                             Follow 
