@@ -1,14 +1,15 @@
 <nav>
-    <% if(user) { %>
-        <a href="/users/<%= user._id %>">Profile</a>
-        <a href="/coffeeShops">View Coffee Shops</a>
-        <a href="/users">View Users</a>
-        <a href="/coffeeShops/new">Add a Coffee Shop</a>
-        <a href="/auth/sign-out">Sign Out</a>
-    <% } else { %>
-        <a href="/coffeeShops">View Coffee Shops</a>
-        <a href="/users">View Users</a>
-        <a href="/auth/sign-in">Sign In</a>
-        <a href="/auth/sign-up">Sign Up</a>
-    <% } %>
+    <ul>
+        <li><a href="/coffeeShops">View Coffee Shops</a></li>
+        <li><a href="/users">View Users</a></li>
+
+        <% if (user) { %>
+            <li><a href="/profiles/<%= user._id %>">Profile</a></li>
+            <li><a href="/coffeeShops/new">Add a Coffee Shop</a></li>
+            <li><a href="/auth/sign-out">Sign Out</a></li>
+        <% } else { %>
+            <li><a href="/auth/sign-in">Sign In</a></li>
+            <li><a href="/auth/sign-up">Sign Up</a></li>
+        <% } %>
+    </ul>
 </nav>
