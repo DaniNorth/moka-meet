@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Following</title>
+</head>
+<body>
+    <%- include('../partials/_navbar.ejs') %>
+
+    <h1>Users I'm Following</h1>
+
+    <% if (user.following.length > 0) { %>
+        <% user.following.forEach(followedUser => { %>
+            <div>
+                <% if (followedUser.profilePic) { %>
+                    <img src="<%= followedUser.profilePic %>" alt="Profile Picture" width="50">
+                <% } %>
+                <p><a href="/users/<%= followedUser._id %>"><%= followedUser.username %></a></p>
+            </div>
+        <% }) %>
+    <% } else { %>
+        <p>You are not following anyone yet.</p>
+    <% } %>
+</body>
+</html>
