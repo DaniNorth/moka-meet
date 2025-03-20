@@ -45,18 +45,21 @@ router.post("/", async (req, res) => {
 
 router.get("/:coffeeShopId", async (req, res) => {
   try {
-    const coffeeShop = await CoffeeShop.findById(
-      req.params.coffeeShopId
-    ).populate("addedBy");
+    const coffeeShop = await CoffeeShop.findById(req.params.coffeeShopId)
+      .populate("addedBy")
+      .populate({
+        path: "reviews",
+        populate: { path: "userId", select: "username" },
+      });
+
     if (!coffeeShop) {
       return res.redirect("/coffeeShops");
     }
 
-    res.render("coffeeShops/show.ejs", { coffeeShop });
+    res.render("coffeeShops/show.ejs", { coffeeShop, user: req.session.user });
   } catch (error) {
     console.error(error);
     res.redirect("/coffeeShops");
   }
 });
-
 module.exports = router;
