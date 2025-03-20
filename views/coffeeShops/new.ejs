@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add a New Coffee Shop</title>
+</head>
+
+<body>
+    <%- include('../partials/_navbar.ejs') %>
+
+        <h1>Add a New Coffee Shop</h1>
+
+        <form action="/coffeeShops" method="post">
+            <label for="name">Coffee Shop Name:</label>
+            <input type="text" name="name" id="name" required />
+
+            <label for="address">Address:</label>
+            <input type="text" name="address" id="address" required />
+
+            <label for="city">City:</label>
+            <input type="text" name="city" id="city" required />
+
+            <label for="picture">Image URL:</label>
+            <input type="text" name="picture" id="picture" />
+
+            <label for="about">About:</label>
+            <textarea name="about" id="about"></textarea>
+
+            <button type="submit">Add Coffee Shop</button>
+        </form>
+</body>
+
+</html>
