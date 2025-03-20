@@ -30,20 +30,14 @@ router.post('/sign-up', async (req, res) => {
     if (req.body.password !== req.body.confirmPassword) {
       return res.send('Password and Confirm Password must match');
     }
-    
+  
     // Must hash the password before sending to the database
     const hashedPassword = bcrypt.hashSync(req.body.password, 10);
     req.body.password = hashedPassword;
-    
-    const newUser = new User({
-      username: req.body.username,
-      email: req.body.email,
-      passwordHash: hashedPassword,
-    });
-
-    // Save user to the database
-    await newUser.save();
-    
+  
+    // All ready to create the new user!
+    await User.create(req.body);
+  
     res.redirect('/auth/sign-in');
   } catch (error) {
     console.log(error);
@@ -62,7 +56,7 @@ router.post('/sign-in', async (req, res) => {
     // There is a user! Time to test their password with bcrypt
     const validPassword = bcrypt.compareSync(
       req.body.password,
-      userInDatabase.passwordHash
+      userInDatabase.password
     );
     if (!validPassword) {
       return res.send('Login failed. Please try again.');
