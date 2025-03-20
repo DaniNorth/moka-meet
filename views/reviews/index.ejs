@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reviews</title>
+</head>
+<body>
+    <%- include('../partials/_navbar.ejs') %>
+
+    <h1><%= isSelf ? "My Reviews" : profileUser.username + "'s Reviews" %></h1>
+
+    <% if (reviews.length > 0) { %>
+        <% reviews.forEach(review => { %>
+            <div>
+                <h3><a href="/coffeeShops/<%= review.coffeeShopId._id %>">
+                    <%= review.coffeeShopId.name %>
+                </a></h3>
+                <p>Rating: <%= review.rating %>/5</p>
+                <p>Comment:<%= review.comment %></p>
+
+                <% if (isSelf) { %>
+                    <form action="/reviews/<%= review._id %>/edit" method="GET">
+                        <button type="submit">Edit</button>
+                    </form>
+                    <form action="/reviews/<%= review._id %>?_method=DELETE" method="POST">
+                        <button type="submit">Delete</button>
+                    </form>
+                <% } %>
+            </div>
+        <% }) %>
+    <% } else { %>
+        <p>No reviews yet.</p>
+    <% } %>
+</body>
+</html>
