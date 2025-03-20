@@ -15,8 +15,14 @@
     <% } %>
 
     <p>Username: <%= user.username %></p>
-    <p>Bio:<%= user.bio || "No bio yet." %></p>
+    <p>Bio: <%= user.bio || "No bio yet." %></p>
 
+    <h2>
+        <a href="/profile/followers">Followers (<%= user.followers ? user.followers.length : 0 %>)</a>
+    </h2>
+    <h2>
+        <a href="/profile/following">Following (<%= user.following ? user.following.length : 0 %>)</a>
+    </h2>
 
     <h2>Visited Coffee Shops</h2>
     <% if (user.lists.visited.length > 0) { %>
