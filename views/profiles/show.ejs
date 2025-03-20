@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= profileUser.username %>'s Profile</title>
+</head>
+<body>
+    <%- include('../partials/_navbar.ejs') %>
+
+    <h1><%= profileUser.username %>'s Profile</h1>
+
+    <% if (profileUser.profilePic) { %>
+        <img src="<%= profileUser.profilePic %>" alt="Profile Picture">
+    <% } %>
+
+    <p>Bio: <%= profileUser.bio || "No bio available" %></p>
+
+    <h2>
+        <a href="/users/<%= profileUser._id %>/followers">
+            Followers (<%= profileUser.followers.length %>)
+        </a>
+    </h2>
+
+    <% if (user && user._id !== profileUser._id) { %>
+        <form action="/users/<%= profileUser._id %>/follow" method="POST">
+            <button type="submit"><%= isFollowing ? "Unfollow" : "Follow" %></button>
+        </form>
+    <% } %>
+
+    <h2>Visited Coffee Shops</h2>
+    <% if (profileUser.lists.visited.length > 0) { %>
+        <% profileUser.lists.visited.forEach(shop => { %>
+            <p><a href="/coffeeShops/<%= shop._id %>"><%= shop.name %></a> - <%= shop.city %></p>
+        <% }) %>
+    <% } else { %>
+        <p>No visited coffee shops yet.</p>
+    <% } %>
+
+    <h2>Wishlist</h2>
+    <% if (profileUser.lists.wishlist.length > 0) { %>
+        <% profileUser.lists.wishlist.forEach(shop => { %>
+            <p><a href="/coffeeShops/<%= shop._id %>"><%= shop.name %></a> - <%= shop.city %></p>
+        <% }) %>
+    <% } else { %>
+        <p>No wishlist coffee shops yet.</p>
+    <% } %>
+
+    <h2>Recent Reviews</h2>
+    <% if (reviews.length > 0) { %>
+        <% reviews.slice(0, 3).forEach(review => { %>
+            <div>
+                <h3><a href="/coffeeShops/<%= review.coffeeShopId._id %>"><%= review.coffeeShopId.name %></a></h3>
+                <p>Rating: <%= review.rating %>/5</p>
+                <p>Comment: <%= review.comment %></p>
+            </div>
+        <% }) %>
+        <p><a href="/users/<%= profileUser._id %>/reviews">View All Reviews</a></p>
+    <% } else { %>
+        <p>No reviews yet.</p>
+    <% } %>
+
+</body>
+</html>
