@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <title>
+        <%= coffeeShop.name %>
+    </title>
+</head>
+
+<body>
+    <%- include('../partials/_navbar.ejs') %>
+
+        <h1>
+            <%= coffeeShop.name %>
+        </h1>
+
+        <% if (coffeeShop.picture) { %>
+            <img src="<%= coffeeShop.picture %>" alt="Image of <%= coffeeShop.name %>" />
+            <% } %>
+
+                <p>Address:
+                    <%= coffeeShop.address %>
+                </p>
+                <p>City:
+                    <%= coffeeShop.city %>
+                </p>
+                <p>About:
+                    <%= coffeeShop.about %>
+                </p>
+                <p>Average Rating:
+                    <%= coffeeShop.averageRating %> / 5
+                </p>
+
+                <% if (user) { %>
+                    <form action="/users/<%= user._id %>/lists/visited" method="POST">
+                        <input type="hidden" name="coffeeShopId" value="<%= coffeeShop._id %>" />
+                        <button type="submit">Add to Been There List</button>
+                    </form>
+
+                    <form action="/users/<%= user._id %>/lists/wishlist" method="POST">
+                        <input type="hidden" name="coffeeShopId" value="<%= coffeeShop._id %>" />
+                        <button type="submit">Add to Wishlist</button>
+                    </form>
+                    <% } else { %>
+                        <p><a href="/auth/sign-in">Sign in to save this coffee shop to your lists.</a></p>
+                        <% } %>
+
+                            <!-- Leave a Review -->
+                            <% if (user) { %>
+                                <h2>Leave a Review</h2>
+                                <form action="/coffeeShops/<%= coffeeShop._id %>/reviews" method="POST">
+                                    <label for="rating">Rating (1-5):</label>
+                                    <select name="rating" id="rating">
+                                        <option value="1">1 - Bad</option>
+                                        <option value="2">2 - Okay</option>
+                                        <option value="3">3 - Good</option>
+                                        <option value="4">4 - Great</option>
+                                        <option value="5">5 - Excellent</option>
+                                    </select>
+
+                                    <label for="comment">Comment:</label>
+                                    <textarea name="comment" id="comment" required></textarea>
+
+                                    <button type="submit">Submit Review</button>
+                                </form>
+                                <% } else { %>
+                                    <p><a href="/auth/sign-in">Sign in to leave a review.</a></p>
+                                    <% } %>
+
+                                        <h2>Reviews</h2>
+                                        <% if (coffeeShop.reviews.length> 0) { %>
+                                            <% coffeeShop.reviews.forEach(review=> { %>
+                                                <div>
+                                                    <p>Rating:
+                                                        <%= review.rating %> / 5
+                                                    </p>
+                                                    <p>Comment:
+                                                        <%= review.comment %>
+                                                    </p>
+                                                    <p>By:
+                                                        <%= review.userId.username %> on <%=
+                                                                review.createdAt.toDateString() %>
+                                                    </p>
+                                                </div>
+                                                <% }) %>
+                                                    <% } else { %>
+                                                        <p>No reviews yet. Be the first to leave one!</p>
+                                                        <% } %>
+</body>
+
+</html>
