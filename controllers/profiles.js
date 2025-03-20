@@ -1,0 +1,222 @@
+const express = require("express");
+const router = express.Router();
+const User = require("../models/user");
+const Review = require("../models/review");
+
+router.get("/profile", async (req, res) => {
+  try {
+    if (!req.session.user) return res.redirect("/auth/sign-in");
+
+    const user = await User.findById(req.session.user._id)
+      .populate({ path: "lists.visited", options: { limit: 4 } })
+      .populate({ path: "lists.wishlist", options: { limit: 4 } })
+      .populate({ path: "followers", select: "username" })
+      .lean();
+
+    const reviews = await Review.find({ userId: req.session.user._id })
+      .populate("coffeeShopId", "name")
+      .limit(3)
+      .lean();
+
+    res.render("profiles/index.ejs", { user, reviews });
+  } catch (error) {
+    console.error(error);
+    res.redirect("/");
+  }
+});
+
+router.get("/profile/edit", async (req, res) => {
+  try {
+    if (!req.session.user) return res.redirect("/auth/sign-in");
+
+    const user = await User.findById(req.session.user._id).lean();
+    res.render("profiles/edit.ejs", { user });
+  } catch (error) {
+    console.error(error);
+    res.redirect("/profile");
+  }
+});
+
+router.post("/profile/edit", async (req, res) => {
+  try {
+    if (!req.session.user) return res.redirect("/auth/sign-in");
+
+    const { bio, profilePic } = req.body;
+
+    await User.findByIdAndUpdate(req.session.user._id, { bio, profilePic });
+    res.redirect("/profile");
+  } catch (error) {
+    console.error(error);
+    res.redirect("/profile");
+  }
+});
+
+router.get("/profile/following", async (req, res) => {
+  try {
+    if (!req.session.user) return res.redirect("/auth/sign-in");
+
+    const user = await User.findById(req.session.user._id)
+      .populate("following")
+      .lean();
+    res.render("profiles/following.ejs", { user });
+  } catch (error) {
+    console.error(error);
+    res.redirect("/profile");
+  }
+});
+
+router.get("/users", async (req, res) => {
+  try {
+    const users = await User.find()
+      .select("username profilePic followers")
+      .lean();
+    res.render("profiles/allUsers.ejs", { users, user: req.session.user });
+  } catch (error) {
+    console.error(error);
+    res.redirect("/");
+  }
+});
+
+router.get("/users/:userId", async (req, res) => {
+  try {
+    const profileUser = await User.findById(req.params.userId)
+      .populate("lists.visited lists.wishlist")
+      .populate("followers following")
+      .lean();
+
+    if (!profileUser) return res.redirect("/users");
+
+    const reviews = await Review.find({ userId: req.params.userId })
+      .populate("coffeeShopId", "name")
+      .limit(3)
+      .lean();
+
+    const isFollowing = req.session.user
+      ? profileUser.followers.some(follower => follower._id.toString() === req.session.user._id)
+      : false;
+
+    res.render("profiles/show.ejs", { profileUser, reviews, isFollowing, user: req.session.user });
+  } catch (error) {
+    console.error(error);
+    res.redirect("/users");
+  }
+});
+
+router.get("/users/:userId/following", async (req, res) => {
+  try {
+    const profileUser = await User.findById(req.params.userId)
+      .populate("following")
+      .lean();
+    res.render("profiles/following.ejs", { profileUser, user: req.session.user });
+  } catch (error) {
+    console.error(error);
+    res.redirect(`/users/${req.params.userId}`);
+  }
+});
+
+router.post("/users/:userId/follow", async (req, res) => {
+  try {
+    const signedInUser = await User.findById(req.session.user._id);
+    const profileUser = await User.findById(req.params.userId);
+
+    if (!signedInUser || !profileUser) return res.redirect("/users");
+
+    if (signedInUser._id.toString() === profileUser._id.toString()) {
+      return res.redirect(`/users/${req.params.userId}`);
+    }
+
+    const alreadyFollowing = signedInUser.following.includes(profileUser._id);
+
+    if (alreadyFollowing) {
+      signedInUser.following.pull(profileUser._id);
+      profileUser.followers.pull(signedInUser._id);
+    } else {
+      signedInUser.following.push(profileUser._id);
+      profileUser.followers.push(signedInUser._id);
+    }
+
+    await signedInUser.save();
+    await profileUser.save();
+
+    res.redirect("/users");
+  } catch (error) {
+    console.error(error);
+    res.redirect("/users");
+  }
+});
+
+router.get("/profile/lists", async (req, res) => {
+  try {
+    if (!req.session.user) return res.redirect("/auth/sign-in");
+
+    const user = await User.findById(req.session.user._id)
+      .populate("lists.visited lists.wishlist lists.removed")
+      .lean();
+
+    res.render("lists/index.ejs", { user, isSelf: true });
+  } catch (error) {
+    console.error(error);
+    res.redirect("/profile");
+  }
+});
+
+router.get("/users/:userId/lists", async (req, res) => {
+  try {
+    const profileUser = await User.findById(req.params.userId)
+      .populate("lists.visited lists.wishlist")
+      .lean();
+
+    res.render("lists/index.ejs", { profileUser, user: req.session.user, isSelf: false });
+  } catch (error) {
+    console.error(error);
+    res.redirect(`/users/${req.params.userId}`);
+  }
+});
+
+router.get("/users/:userId/followers", async (req, res) => {
+  try {
+    const profileUser = await User.findById(req.params.userId)
+      .populate("followers", "username profilePic")
+      .lean();
+
+    if (!profileUser) return res.redirect("/users");
+
+    res.render("profiles/followers.ejs", { profileUser, user: req.session.user });
+  } catch (error) {
+    console.error(error);
+    res.redirect(`/users/${req.params.userId}`);
+  }
+});
+
+router.get("/profile/reviews", async (req, res) => {
+  try {
+    if (!req.session.user) return res.redirect("/auth/sign-in");
+
+    const reviews = await Review.find({ userId: req.session.user._id })
+      .populate("coffeeShopId", "name")
+      .lean();
+
+    res.render("reviews/index.ejs", { reviews, user: req.session.user, isSelf: true });
+  } catch (error) {
+    console.error(error);
+    res.redirect("/profile");
+  }
+});
+
+router.get("/users/:userId/reviews", async (req, res) => {
+  try {
+    const profileUser = await User.findById(req.params.userId).lean();
+    if (!profileUser) return res.redirect("/users");
+
+    const reviews = await Review.find({ userId: req.params.userId })
+      .populate("coffeeShopId", "name")
+      .lean();
+
+    res.render("reviews/index.ejs", { reviews, profileUser, user: req.session.user, isSelf: false });
+  } catch (error) {
+    console.error(error);
+    res.redirect(`/users/${req.params.userId}`);
+  }
+});
+
+module.exports = router;
