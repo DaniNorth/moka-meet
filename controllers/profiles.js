@@ -10,7 +10,7 @@ router.get("/profile", async (req, res) => {
     const user = await User.findById(req.session.user._id)
       .populate({ path: "lists.visited", options: { limit: 4 } })
       .populate({ path: "lists.wishlist", options: { limit: 4 } })
-      .populate({ path: "followers", select: "username" })
+      .populate({ path: "followers following", select: "username profilePic" })
       .lean();
 
     const reviews = await Review.find({ userId: req.session.user._id })
@@ -51,26 +51,20 @@ router.post("/profile/edit", async (req, res) => {
   }
 });
 
-router.get("/profile/following", async (req, res) => {
-  try {
-    if (!req.session.user) return res.redirect("/auth/sign-in");
-
-    const user = await User.findById(req.session.user._id)
-      .populate("following")
-      .lean();
-    res.render("profiles/following.ejs", { user });
-  } catch (error) {
-    console.error(error);
-    res.redirect("/profile");
-  }
-});
-
 router.get("/users", async (req, res) => {
   try {
     const users = await User.find()
-      .select("username profilePic followers")
+      .select("username profilePic")
       .lean();
-    res.render("profiles/allUsers.ejs", { users, user: req.session.user });
+
+    let currentUser = null;
+    if (req.session.user) {
+      currentUser = await User.findById(req.session.user._id)
+        .populate("following", "_id")
+        .lean();
+    }
+
+    res.render("profiles/allUsers.ejs", { users, user: currentUser });
   } catch (error) {
     console.error(error);
     res.redirect("/");
@@ -81,7 +75,7 @@ router.get("/users/:userId", async (req, res) => {
   try {
     const profileUser = await User.findById(req.params.userId)
       .populate("lists.visited lists.wishlist")
-      .populate("followers following")
+      .populate("followers following", "username profilePic")
       .lean();
 
     if (!profileUser) return res.redirect("/users");
@@ -92,7 +86,7 @@ router.get("/users/:userId", async (req, res) => {
       .lean();
 
     const isFollowing = req.session.user
-      ? profileUser.followers.some(follower => follower._id.toString() === req.session.user._id)
+      ? profileUser.followers.some(follower => follower._id.toString() === req.session.user._id.toString())
       : false;
 
     res.render("profiles/show.ejs", { profileUser, reviews, isFollowing, user: req.session.user });
@@ -102,27 +96,18 @@ router.get("/users/:userId", async (req, res) => {
   }
 });
 
-router.get("/users/:userId/following", async (req, res) => {
-  try {
-    const profileUser = await User.findById(req.params.userId)
-      .populate("following")
-      .lean();
-    res.render("profiles/following.ejs", { profileUser, user: req.session.user });
-  } catch (error) {
-    console.error(error);
-    res.redirect(`/users/${req.params.userId}`);
-  }
-});
-
+// All ChatGPT code, could not firgure out how to reload based on page I access the follow button
 router.post("/users/:userId/follow", async (req, res) => {
   try {
+    if (!req.session.user) return res.redirect("/auth/sign-in");
+
     const signedInUser = await User.findById(req.session.user._id);
     const profileUser = await User.findById(req.params.userId);
 
     if (!signedInUser || !profileUser) return res.redirect("/users");
 
     if (signedInUser._id.toString() === profileUser._id.toString()) {
-      return res.redirect(`/users/${req.params.userId}`);
+      return res.redirect(`/users/${req.params.userId}`); // Prevent self-follow
     }
 
     const alreadyFollowing = signedInUser.following.includes(profileUser._id);
@@ -138,7 +123,13 @@ router.post("/users/:userId/follow", async (req, res) => {
     await signedInUser.save();
     await profileUser.save();
 
-    res.redirect("/users");
+    // Check if the request came from the allUsers.ejs page or the show.ejs profile page
+    if (req.headers.referer && req.headers.referer.includes(`/users/${req.params.userId}`)) {
+      return res.redirect(`/users/${req.params.userId}`); // Reload the same profile page
+    } else {
+      return res.redirect("/users"); // Reload all users list
+    }
+
   } catch (error) {
     console.error(error);
     res.redirect("/users");
@@ -167,6 +158,19 @@ router.get("/users/:userId/lists", async (req, res) => {
       .lean();
 
     res.render("lists/index.ejs", { profileUser, user: req.session.user, isSelf: false });
+  } catch (error) {
+    console.error(error);
+    res.redirect(`/users/${req.params.userId}`);
+  }
+});
+
+router.get("/users/:userId/following", async (req, res) => {
+  try {
+    const profileUser = await User.findById(req.params.userId)
+      .populate("following", "username profilePic")
+      .lean();
+
+    res.render("profiles/following.ejs", { profileUser, user: req.session.user });
   } catch (error) {
     console.error(error);
     res.redirect(`/users/${req.params.userId}`);
