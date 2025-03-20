@@ -12,6 +12,8 @@ const passUserToView = require('./middleware/pass-user-to-view.js');
 
 const authController = require('./controllers/auth.js');
 const coffeeShopsController = require('./controllers/coffeeShops.js');
+const reviewController = require('./controllers/reviews.js');
+const listController = require('./controllers/lists.js');
 
 const port = process.env.PORT ? process.env.PORT : '3000';
 
@@ -47,6 +49,10 @@ app.use('/auth', authController);
 app.use(isSignedIn);
 
 app.use('/coffeeShops', coffeeShopsController);
+
+app.use('/coffeeShops', reviewController);
+
+app.use('/users', listController);
 
 app.listen(port, () => {
   console.log(`Moka Meet express app running on port ${port}!`);
