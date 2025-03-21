@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with <%= chatPartner.username %></title>
+</head>
+<body>
+    <%- include('../partials/_navbar.ejs') %>
+
+    <h1>Chat with <%= chatPartner.username %></h1>
+
+    <% messages.forEach(message => { %>
+        <div>
+            <% if (message.sender._id.toString() === user._id.toString()) { %>
+                <p><strong>You:</strong> <%= message.messageText %></p>
+            <% } else { %>
+                <p><strong><%= chatPartner.username %>:</strong> <%= message.messageText %></p>
+            <% } %>
+        </div>
+    <% }) %>
+
+    <form action="/messages/send" method="POST">
+        <input type="hidden" name="receiver" value="<%= chatPartner._id %>">
+        <textarea name="messageText" required></textarea>
+        <button type="submit">Send</button>
+    </form>
+</body>
+</html>
