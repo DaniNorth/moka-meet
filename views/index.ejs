@@ -4,45 +4,65 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/styles.css" />
   <title>Moka Meet - Home</title>
 </head>
 
 <body>
+  <div class="video-background">
+    <video autoplay muted loop playsinline class="background-video">
+      <source src="/css/assets/mokaMeetBackground.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  <div class="video-background">
+    <video autoplay muted loop playsinline class="background-video">
+      <source src="/css/assets/mokaMeetBackground.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  <header class="homepage-header">
+    <video autoplay muted loop playsinline class="background-video">
+      <source src="css/assets/homepageHeader.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+    <div class="header-overlay"></div>
+  </header>
 
   <%- include('./partials/_navbar.ejs') %>
 
-    <main>
-      <% if (user) { %>
-        <h1>Welcome to Moka Meet, <%= user.username %>!</h1>
-        <p>Discover coffee shops, connect with other coffee lovers, and share your experiences.</p>
-
-        <div>
-          <a href="/coffeeShops">
-            <button>Explore Coffee Shops</button>
-          </a>
-          <a href="/users">
-            <button>Meet Other Users</button>
-          </a>
-        </div>
-
-        <p>
-          <a href="/auth/sign-out">Sign Out</a>
-        </p>
-
-        <% } else { %>
-          <h1>Welcome to Moka Meet!</h1>
-          <p>Sign in to explore coffee shops and connect with others.</p>
-
-          <div>
-            <a href="/auth/sign-in">
-              <button>Sign In</button>
-            </a>
-            <a href="/auth/sign-up">
-              <button>Sign Up</button>
-            </a>
-          </div>
-          <% } %>
-    </main>
+  <main class="homepage-main">
+    <% if (user) { %>
+      <h1>Welcome to Moka Meet, <%= user.username %>!</h1>
+      <p>Discover coffee shops, connect with other coffee lovers, and share your experiences.</p>
+  
+      <div class="homepage-btn-group">
+        <a href="/coffeeShops">
+          <button class="learn-more">Explore Coffee Shops</button>
+        </a>
+        <a href="/users">
+          <button class="learn-more">Meet Other Users</button>
+        </a>
+      </div>
+  
+      <p>
+        <a href="/auth/sign-out" class="signup-link">Sign Out</a>
+      </p>
+  
+    <% } else { %>
+      <h1>Welcome to Moka Meet!</h1>
+      <p>Sign in to explore coffee shops and connect with others.</p>
+  
+      <div class="homepage-btn-group">
+        <a href="/auth/sign-in">
+          <button class="learn-more">Sign In</button>
+        </a>
+        <a href="/auth/sign-up">
+          <button class="learn-more">Sign Up</button>
+        </a>
+      </div>
+    <% } %>
+  </main>
 
 </body>
 
