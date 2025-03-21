@@ -1,7 +1,7 @@
 # Moka Meet ☕  
 *A social media app for coffee lovers.*
 
-![Moka Meet Logo](./mMLogo.png)  
+![Moka Meet Logo](static/css/assets/mMLogo.png)
 
 ## 📌 About the App  
 Moka Meet is a web application designed for coffee enthusiasts to connect over their shared love for cafes and coffee shops. Users can add, review, and browse coffee shops, view other user profiles, send messages, and maintain a wishlist of favorite spots.  
