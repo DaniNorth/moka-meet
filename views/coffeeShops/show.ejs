@@ -2,93 +2,98 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/css/style.css" />
-    <title>
-        <%= coffeeShop.name %>
-    </title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <title><%= coffeeShop.name %></title>
 </head>
 
 <body>
-    <%- include('../partials/_navbar.ejs') %>
+  <div class="video-background">
+    <video autoplay muted loop playsinline class="background-video">
+      <source src="/css/assets/mokaMeetBackground.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  </div>
 
-        <h1>
-            <%= coffeeShop.name %>
-        </h1>
+  <%- include('../partials/_navbar.ejs') %>
 
-        <% if (coffeeShop.picture) { %>
-            <img src="<%= coffeeShop.picture %>" alt="Image of <%= coffeeShop.name %>" />
-            <% } %>
+  <div class="coffee-detail-wrapper">
 
-                <p>Address:
-                    <%= coffeeShop.address %>
-                </p>
-                <p>City:
-                    <%= coffeeShop.city %>
-                </p>
-                <p>About:
-                    <%= coffeeShop.about %>
-                </p>
-                <p>Average Rating:
-                    <%= coffeeShop.averageRating %> / 5
-                </p>
+    <div class="coffee-detail-header">
+      <h1><%= coffeeShop.name %></h1>
+      <% if (coffeeShop.picture) { %>
+        <img class="coffee-banner-img" src="<%= coffeeShop.picture %>" alt="<%= coffeeShop.name %>" />
+      <% } %>
+    </div>
 
-                <% if (user) { %>
-                    <form action="/users/<%= user._id %>/lists/visited" method="POST">
-                        <input type="hidden" name="coffeeShopId" value="<%= coffeeShop._id %>" />
-                        <button type="submit">Add to Been There List</button>
-                    </form>
+    <div class="coffee-meta">
+      <p><strong>Address:</strong> <%= coffeeShop.address %></p>
+      <p><strong>City:</strong> <%= coffeeShop.city %></p>
+      <p><strong>Average Rating:</strong> <%= coffeeShop.averageRating.toFixed(1) %> / 5</p>
+    </div>
 
-                    <form action="/users/<%= user._id %>/lists/wishlist" method="POST">
-                        <input type="hidden" name="coffeeShopId" value="<%= coffeeShop._id %>" />
-                        <button type="submit">Add to Wishlist</button>
-                    </form>
-                    <% } else { %>
-                        <p><a href="/auth/sign-in">Sign in to save this coffee shop to your lists.</a></p>
-                        <% } %>
+    <div class="coffee-about">
+      <p><%= coffeeShop.about %></p>
+    </div>
 
-                            <!-- Leave a Review -->
-                            <% if (user) { %>
-                                <h2>Leave a Review</h2>
-                                <form action="/coffeeShops/<%= coffeeShop._id %>/reviews" method="POST">
-                                    <label for="rating">Rating (1-5):</label>
-                                    <select name="rating" id="rating">
-                                        <option value="1">1 - Bad</option>
-                                        <option value="2">2 - Okay</option>
-                                        <option value="3">3 - Good</option>
-                                        <option value="4">4 - Great</option>
-                                        <option value="5">5 - Excellent</option>
-                                    </select>
+    <% if (user) { %>
+      <div class="list-icons">
+        <form action="/users/<%= user._id %>/lists/visited" method="POST" class="list-form">
+          <input type="hidden" name="coffeeShopId" value="<%= coffeeShop._id %>" />
+          <button class="icon-button">Add to Been There List</button>
+        </form>
 
-                                    <label for="comment">Comment:</label>
-                                    <textarea name="comment" id="comment" required></textarea>
+        <form action="/users/<%= user._id %>/lists/wishlist" method="POST" class="list-form">
+          <input type="hidden" name="coffeeShopId" value="<%= coffeeShop._id %>" />
+          <button class="icon-button">Add to Wishlist</button>
+        </form>
+      </div>
+    <% } else { %>
+      <p class="light"><a href="/auth/sign-in">Sign in to save this coffee shop to your lists.</a></p>
+    <% } %>
 
-                                    <button type="submit">Submit Review</button>
-                                </form>
-                                <% } else { %>
-                                    <p><a href="/auth/sign-in">Sign in to leave a review.</a></p>
-                                    <% } %>
+    <div class="review-section">
+      <h2>Reviews</h2>
+      <% if (coffeeShop.reviews.length > 0) { %>
+        <% coffeeShop.reviews.forEach(review => { %>
+          <div class="review-bubble">
+            <p><strong>Rating:</strong> <%= review.rating %> / 5</p>
+            <p><%= review.comment %></p>
+            <p class="review-author">
+              — <%= review.userId.username %>, <%= review.createdAt.toDateString() %>
+            </p>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p class="light">No reviews yet. Be the first to leave one!</p>
+      <% } %>
+    </div>
 
-                                        <h2>Reviews</h2>
-                                        <% if (coffeeShop.reviews.length> 0) { %>
-                                            <% coffeeShop.reviews.forEach(review=> { %>
-                                                <div>
-                                                    <p>Rating:
-                                                        <%= review.rating %> / 5
-                                                    </p>
-                                                    <p>Comment:
-                                                        <%= review.comment %>
-                                                    </p>
-                                                    <p>By:
-                                                        <%= review.userId.username %> on <%=
-                                                                review.createdAt.toDateString() %>
-                                                    </p>
-                                                </div>
-                                                <% }) %>
-                                                    <% } else { %>
-                                                        <p>No reviews yet. Be the first to leave one!</p>
-                                                        <% } %>
+    <% if (user) { %>
+      <div class="review-section">
+        <h2>Leave a Review</h2>
+        <form action="/coffeeShops/<%= coffeeShop._id %>/reviews" method="POST" class="styled-form review-form">
+          <label for="rating">Rating (1-5):</label>
+          <select name="rating" id="rating">
+            <option value="1">1 - Bad</option>
+            <option value="2">2 - Okay</option>
+            <option value="3">3 - Good</option>
+            <option value="4">4 - Great</option>
+            <option value="5">5 - Excellent</option>
+          </select>
+
+          <label for="comment">Comment:</label>
+          <textarea name="comment" id="comment" required placeholder="Tell us your thoughts..."></textarea>
+
+          <button class="learn-more" type="submit">Submit Review</button>
+        </form>
+      </div>
+    <% } else { %>
+      <p class="light"><a href="/auth/sign-in">Sign in to leave a review.</a></p>
+    <% } %>
+
+  </div>
 </body>
 
 </html>
