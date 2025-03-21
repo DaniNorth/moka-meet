@@ -39,6 +39,9 @@
         <% profileUser.lists.visited.forEach(shop => { %>
             <p><a href="/coffeeShops/<%= shop._id %>"><%= shop.name %></a> - <%= shop.city %></p>
         <% }) %>
+            <p><a href="/users/<%= profileUser._id %>/lists">
+                View <%= profileUser.username %>'s visted coffee shop list
+            </a></p>
     <% } else { %>
         <p>No visited coffee shops yet.</p>
     <% } %>
@@ -48,6 +51,9 @@
         <% profileUser.lists.wishlist.forEach(shop => { %>
             <p><a href="/coffeeShops/<%= shop._id %>"><%= shop.name %></a> - <%= shop.city %></p>
         <% }) %>
+        <p><a href="/users/<%= profileUser._id %>/lists">
+            View <%= profileUser.username %>'s coffee shop wish list
+        </a></p>
     <% } else { %>
         <p>No wishlist coffee shops yet.</p>
     <% } %>

@@ -8,11 +8,31 @@ router.get("/", async (req, res) => {
   try {
     let coffeeShops;
 
+    // Add averageRating property to each shop
     if (req.query.filter === "user" && req.session.user) {
-      coffeeShops = await CoffeeShop.find({ addedBy: req.session.user._id });
+      coffeeShops = await CoffeeShop.find({ addedBy: req.session.user._id }).populate({
+        path: "reviews",
+        select: "rating",
+      });
     } else {
-      coffeeShops = await CoffeeShop.find();
+      coffeeShops = await CoffeeShop.find().populate({
+        path: "reviews",
+        select: "rating",
+      });
     }
+    // rating calculation and handling done by ChatGPT
+    coffeeShops = coffeeShops.map(shop => {
+      const ratings = shop.reviews.map(r => r.rating);
+      const averageRating = ratings.length
+        ? (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1)
+        : null;
+
+      return {
+        ...shop.toObject(),
+        averageRating,
+      };
+    });
+
 
     res.render("coffeeShops/index.ejs", {
       coffeeShops: coffeeShops,
@@ -55,6 +75,15 @@ router.get("/:coffeeShopId", async (req, res) => {
     if (!coffeeShop) {
       return res.redirect("/coffeeShops");
     }
+    
+    // rating calculation and handling done by ChatGPT
+    // Calculate average rating
+    const ratings = coffeeShop.reviews.map(r => r.rating);
+    const averageRating = ratings.length
+      ? (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1)
+      : "No ratings yet";
+    
+    coffeeShop.averageRating = averageRating;
 
     res.render("coffeeShops/show.ejs", { coffeeShop, user: req.session.user });
   } catch (error) {
