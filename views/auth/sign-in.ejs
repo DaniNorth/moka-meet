@@ -1,18 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/styles.css" />
   <title>Sign In</title>
 </head>
 <body>
-  <h1>Sign in</h1>
-  <form action="/auth/sign-in" method="POST">
-    <label for="username">Username:</label>
-    <input type="text" name="username" id="username" required />
-    <label for="password">Password:</label>
-    <input type="password" name="password" id="password" required />
-    <button type="submit">Sign in</button>
-  </form>
+  <!-- Background Video -->
+  <div class="video-background">
+    <video autoplay muted loop playsinline class="background-video">
+      <source src="/css/assets/mokaMeetBackground.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
+  <!-- Sign In Form -->
+  <div class="signup-wrapper">
+    <div class="signup-box">
+      <p class="signup-title">Welcome Back</p>
+      <form action="/auth/sign-in" method="POST">
+        <div class="signup-group">
+          <label class="signup-label" for="username">Username</label>
+          <input placeholder="Enter your username" name="username" class="signup-input" type="text" required />
+        </div>
+
+        <div class="signup-group">
+          <label class="signup-label" for="password">Password</label>
+          <input placeholder="Enter your password" name="password" class="signup-input" type="password" required />
+        </div>
+
+        <div class="signup-action">
+          <button class="signup-btn" type="submit">Sign In</button>
+          <p>Don't have an account? <a class="signup-link" href="/auth/sign-up">Sign up here</a></p>
+        </div>
+      </form>
+    </div>
+  </div>
 </body>
 </html>
