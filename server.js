@@ -13,6 +13,7 @@ const passUserToView = require('./middleware/pass-user-to-view.js');
 const authController = require('./controllers/auth.js');
 const coffeeShopsController = require('./controllers/coffeeShops.js');
 const profilesController = require("./controllers/profiles.js");
+const messagesController = require("./controllers/messages.js"); 
 const reviewController = require('./controllers/reviews.js');
 const listController = require('./controllers/lists.js');
 
@@ -25,7 +26,7 @@ mongoose.connection.on('connected', () => {
 
 app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride('_method'));
-
+app.use(express.static("static"));
 
 app.use(
   session({
@@ -45,6 +46,10 @@ app.get('/', (req, res) => {
   }
 });
 
+app.get('/home', (req, res) => {
+  res.render('index.ejs');
+});
+
 app.use('/auth', authController);
 
 app.use(isSignedIn);
@@ -52,6 +57,8 @@ app.use(isSignedIn);
 app.use('/coffeeShops', coffeeShopsController);
 
 app.use("/", profilesController);
+
+app.use("/messages", messagesController);
 
 app.use('/coffeeShops', reviewController);
 
