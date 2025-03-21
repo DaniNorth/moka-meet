@@ -51,6 +51,36 @@ router.post("/profile/edit", async (req, res) => {
   }
 });
 
+router.get("/profile/followers", async (req, res) => {
+  try {
+    if (!req.session.user) return res.redirect("/auth/sign-in");
+
+    const user = await User.findById(req.session.user._id)
+      .populate("followers", "username profilePic")
+      .lean();
+
+    res.render("profiles/followers.ejs", { profileUser: user, user });
+  } catch (error) {
+    console.error(error);
+    res.redirect("/profile");
+  }
+});
+
+router.get("/profile/following", async (req, res) => {
+  try {
+    if (!req.session.user) return res.redirect("/auth/sign-in");
+
+    const user = await User.findById(req.session.user._id)
+      .populate("following", "username profilePic")
+      .lean();
+
+    res.render("profiles/following.ejs", { profileUser: user, user });
+  } catch (error) {
+    console.error(error);
+    res.redirect("/profile");
+  }
+});
+
 router.get("/users", async (req, res) => {
   try {
     const users = await User.find()
@@ -96,7 +126,7 @@ router.get("/users/:userId", async (req, res) => {
   }
 });
 
-// All ChatGPT code, could not firgure out how to reload based on page I access the follow button
+// ChatGPT code, could not firgure out how to reload based on page I access the follow button
 router.post("/users/:userId/follow", async (req, res) => {
   try {
     if (!req.session.user) return res.redirect("/auth/sign-in");
@@ -135,6 +165,7 @@ router.post("/users/:userId/follow", async (req, res) => {
     res.redirect("/users");
   }
 });
+//end of chatGPT Code
 
 router.get("/profile/lists", async (req, res) => {
   try {
