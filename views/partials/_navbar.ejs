@@ -1,10 +1,12 @@
 <nav>
     <ul>
+        <li><a href="/home">Homepage</a></li>
         <li><a href="/coffeeShops">View Coffee Shops</a></li>
         <li><a href="/users">View Users</a></li>
 
         <% if (user) { %>
             <li><a href="/profile">My Profile</a></li>
+            <li><a href="/messages">Messages</a></li>
             <li><a href="/coffeeShops/new">Add a Coffee Shop</a></li>
             <li><a href="/auth/sign-out">Sign Out</a></li>
         <% } else { %>
