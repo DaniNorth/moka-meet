@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Edit Review</title>
+</head>
+<body>
+  <%- include('../partials/_navbar.ejs') %>
+
+  <h1>Edit Your Review</h1>
+
+  <form action="/coffeeShops/<%= coffeeShopId %>/reviews/<%= review._id %>?_method=PUT" method="POST">
+    <label for="rating">Rating (1–5):</label>
+    <select name="rating" id="rating" required>
+      <% for (let i = 1; i <= 5; i++) { %>
+        <option value="<%= i %>" <%= review.rating === i ? "selected" : "" %>><%= i %></option>
+      <% } %>
+    </select>
+
+    <label for="comment">Comment:</label>
+    <textarea name="comment" id="comment" required><%= review.comment %></textarea>
+
+    <button type="submit">Update Review</button>
+  </form>
+
+  <a href="/coffeeShops/<%= coffeeShopId %>">Back to Coffee Shop</a>
+</body>
+</html>
