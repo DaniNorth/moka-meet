@@ -1,28 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Compose Message</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <title>Compose Message</title>
 </head>
 <body>
-    <%- include('../partials/_navbar.ejs') %>
+  <div class="video-background">
+    <video autoplay muted loop playsinline class="background-video">
+      <source src="/css/assets/mokaMeetBackground.mp4" type="video/mp4" />
+    </video>
+  </div>
 
-    <h1>Compose Message</h1>
+  <%- include('../partials/_navbar.ejs') %>
 
-    <form action="/messages/send" method="POST">
-        <label for="receiver">Select User:</label>
-        <select name="receiver" required>
-            <% mutualFollowers.forEach(follower => { %>
-                <option value="<%= follower._id %>"><%= follower.username %></option>
-            <% }) %>
-        </select>
+  <div class="inbox-wrapper">
+    <h1 class="inbox-title">Compose Message</h1>
 
-        <label for="messageText">Message:</label>
-        <textarea name="messageText" required></textarea>
+    <form action="/messages/send" method="POST" class="compose-form">
+      <label for="receiver">Select User:</label>
+      <select name="receiver" id="receiver" required>
+        <% mutualFollowers.forEach(follower => { %>
+          <option value="<%= follower._id %>"><%= follower.username %></option>
+        <% }) %>
+      </select>
 
-        <button type="submit">Send</button>
+      <label for="messageText">Message:</label>
+      <textarea name="messageText" id="messageText" placeholder="Write your message..." required></textarea>
+
+      <button type="submit" class="learn-more">Send</button>
     </form>
-
+  </div>
 </body>
 </html>
