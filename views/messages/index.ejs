@@ -3,32 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css" />
     <title>Inbox</title>
 </head>
 <body>
+    <div class="video-background">
+        <video autoplay muted loop playsinline class="background-video">
+          <source src="/css/assets/mokaMeetBackground.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+    </div>
+
     <%- include('../partials/_navbar.ejs') %>
 
-    <h1>Inbox</h1>
-    
-    <form action="/messages/new" method="get">
-        <button type="submit">Compose</button>
-    </form>
+    <div class="inbox-wrapper">
+        <h1 class="inbox-title">Inbox</h1>
 
-    <% if (formattedMessages.length > 0) { %>
-        <% formattedMessages.forEach(({ chatPartner, lastMessage }) => { %>
-          <div>
-            <a href="/messages/<%= chatPartner ? chatPartner._id : '' %>">
-              <% if (chatPartner && chatPartner.profilePic) { %>
-                <img src="<%= chatPartner.profilePic %>" width="40" />
-              <% } %>
-              <strong><%= chatPartner ? chatPartner.username : "Unknown User" %></strong>
-            </a>
-            <p><%= lastMessage.messageText %></p>
-          </div>
-        <% }) %>
-      <% } else { %>
-        <p>No messages yet.</p>
-      <% } %>
+        <form action="/messages/new" method="get" class="compose-form">
+            <button type="submit" class="learn-more">Compose</button>
+        </form>
 
+        <% if (formattedMessages.length > 0) { %>
+            <div class="message-list">
+                <% formattedMessages.forEach(({ chatPartner, lastMessage }) => { %>
+                  <a href="/messages/<%= chatPartner ? chatPartner._id : '' %>" class="message-preview">
+                    <% if (chatPartner) { %>
+                        <img 
+                          src="<%= chatPartner.profilePic || '/css/assets/default-avatar.png' %>" 
+                          class="avatar" 
+                          alt="<%= chatPartner.username %>'s profile picture" />
+                      <% } else { %>
+                        <img 
+                          src="/css/assets/default-avatar.png" 
+                          class="avatar" 
+                          alt="Unknown user" />
+                      <% } %>
+                      
+                    <div class="message-info">
+                      <strong><%= chatPartner ? chatPartner.username : "Unknown User" %></strong>
+                      <p class="last-message"><%= lastMessage.messageText %></p>
+                    </div>
+                  </a>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <p class="empty-state">No messages yet.</p>
+        <% } %>
+    </div>
 </body>
 </html>
