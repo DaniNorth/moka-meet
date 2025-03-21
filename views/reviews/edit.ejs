@@ -3,28 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/styles.css" />
   <title>Edit Review</title>
 </head>
 <body>
+  <div class="video-background">
+    <video autoplay muted loop playsinline class="background-video">
+      <source src="/css/assets/mokaMeetBackground.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
   <%- include('../partials/_navbar.ejs') %>
 
-  <h1>Edit Your Review</h1>
+  <div class="form-wrapper">
+    <h1 class="form-title">Edit Your Review</h1>
 
-  <form action="/coffeeShops/<%= coffeeShopId %>/reviews/<%= review._id %>?_method=PUT" method="POST">
-    <label for="rating">Rating (1–5):</label>
-    <select name="rating" id="rating" required>
-      <% for (let i = 1; i <= 5; i++) { %>
-        <option value="<%= i %>" <%= review.rating === i ? "selected" : "" %>><%= i %></option>
-      <% } %>
-    </select>
+    <form 
+      action="/coffeeShops/<%= coffeeShopId %>/reviews/<%= review._id %>?_method=PUT" 
+      method="POST" 
+      class="styled-form"
+    >
+      <label for="rating">Rating (1–5):</label>
+      <select name="rating" id="rating" required>
+        <% for (let i = 1; i <= 5; i++) { %>
+          <option value="<%= i %>" <%= review.rating === i ? "selected" : "" %>><%= i %></option>
+        <% } %>
+      </select>
 
-    <label for="comment">Comment:</label>
-    <textarea name="comment" id="comment" required><%= review.comment %></textarea>
+      <label for="comment">Comment:</label>
+      <textarea name="comment" id="comment" required><%= review.comment %></textarea>
 
-    <button type="submit">Update Review</button>
-  </form>
-
-  <a href="/coffeeShops/<%= coffeeShopId %>">Back to Coffee Shop</a>
-</body>
-</html>
+      <button type="submit" class="learn-more">Update
