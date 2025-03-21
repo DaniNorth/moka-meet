@@ -1,0 +1,49 @@
+<a href="/coffeeShops/<%= shop._id %>" class="coffee-card">
+    <div class="coffee-img">
+        <% if (shop.picture) { %>
+          <img src="<%= shop.picture %>" alt="<%= shop.name %> photo" class="coffee-img-tag">
+        <% } else { %>
+          <div class="coffee-img-fallback">No Image</div>
+        <% } %>
+      </div>
+    <div class="coffee-text">
+      <p class="coffee-title"><%= shop.name %></p>
+      <p class="coffee-info"><%= shop.city %></p>
+  
+      <div class="coffee-stars">
+        <% const fullStars = Math.floor(shop.averageRating || 0); %>
+        <% const hasHalfStar = (shop.averageRating % 1) >= 0.5; %>
+        <% for (let i = 0; i < 5; i++) { %>
+          <% if (i < fullStars) { %>
+            <span class="star full">&#9733;</span>
+          <% } else if (i === fullStars && hasHalfStar) { %>
+            <span class="star half">&#9733;</span>
+          <% } else { %>
+            <span class="star empty">&#9733;</span>
+          <% } %>
+        <% } %>
+      </div>
+  
+      <% if (user) { %>
+      <div class="list-icons">
+        <% const inWishlist = user.lists?.wishlist?.some(id => id.toString() === shop._id.toString()); %>
+        <% const inVisited = user.lists?.visited?.some(id => id.toString() === shop._id.toString()); %>
+  
+        <form action="/users/<%= user._id %>/lists/wishlist" method="POST" class="list-form">
+          <input type="hidden" name="coffeeShopId" value="<%= shop._id %>">
+          <button type="submit" class="icon-button wishlist">
+            <span class="icon-label"><%= inWishlist ? 'Wishlisted' : 'Wishlist' %></span>
+          </button>
+        </form>
+  
+        <form action="/users/<%= user._id %>/lists/visited" method="POST" class="list-form">
+          <input type="hidden" name="coffeeShopId" value="<%= shop._id %>">
+          <button type="submit" class="icon-button visited">
+            <span class="icon-label"><%= inVisited ? 'Visited' : 'Mark Visited' %></span>
+          </button>
+        </form>
+      </div>
+      <% } %>
+    </div>
+  </a>
+  
