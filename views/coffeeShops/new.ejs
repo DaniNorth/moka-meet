@@ -4,15 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css" />
     <title>Add a New Coffee Shop</title>
 </head>
 
 <body>
+    <div class="video-background">
+        <video autoplay muted loop playsinline class="background-video">
+            <source src="/css/assets/mokaMeetBackground.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
     <%- include('../partials/_navbar.ejs') %>
 
-        <h1>Add a New Coffee Shop</h1>
+    <div class="form-wrapper">
+        <h1 class="form-title">Add a New Coffee Shop</h1>
 
-        <form action="/coffeeShops" method="post">
+        <form action="/coffeeShops" method="post" class="styled-form">
             <label for="name">Coffee Shop Name:</label>
             <input type="text" name="name" id="name" required />
 
@@ -28,8 +37,9 @@
             <label for="about">About:</label>
             <textarea name="about" id="about"></textarea>
 
-            <button type="submit">Add Coffee Shop</button>
+            <button type="submit" class="learn-more">Add Coffee Shop</button>
         </form>
+    </div>
 </body>
 
 </html>
