@@ -4,35 +4,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css" />
     <title>Coffee Shops</title>
 </head>
 
 <body>
+    <div class="video-background">
+        <video autoplay muted loop playsinline class="background-video">
+          <source src="/css/assets/mokaMeetBackground.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    <div class="video-background">
+        <video autoplay muted loop playsinline class="background-video">
+          <source src="/css/assets/mokaMeetBackground.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+
     <%- include('../partials/_navbar.ejs') %>
 
         <h1>Discover Amazing Coffee Shops</h1>
 
         <% if (user) { %>
             <a href="/coffeeShops/new">
-                <button>Add a Coffee Shop</button>
+                <button class="learn-more">Add a Coffee Shop</button>
             </a>
             <% } %>
 
                 <% if (coffeeShops.length> 0) { %>
-                    <% coffeeShops.forEach(shop=> { %>
+                    <div class="card-grid">
+                        <% coffeeShops.forEach(shop=> { %>
+                            <%- include('../partials/_coffeeCard', { shop, user }) %>
+                            <% }) %>
+                    
                         <div>
-                            <h2>
-                                <%= shop.name %>
-                            </h2>
-                            <p>City: <%= shop.city %>
-                            </p>
-                            <p> Rating: <%= shop.averageRating || "No ratings yet" %> / 5</p>
-                            <a href="/coffeeShops/<%= shop._id %>">View Details</a>
-                        </div>
-                        <% }) %>
                             <% } else { %>
                                 <p>No coffee shops found. Be the first to add one!</p>
-                                <% } %>
+                            <% } %>
 </body>
 
 </html>
