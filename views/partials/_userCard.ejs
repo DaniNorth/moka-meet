@@ -1,0 +1,27 @@
+<a href="/users/<%= profileUser._id %>" class="user-card">
+    <div class="user-avatar">
+      <% if (profileUser.profilePic) { %>
+        <img src="<%= profileUser.profilePic %>" alt="<%= profileUser.username %>'s profile picture">
+      <% } else { %>
+        <div class="avatar-placeholder">
+          <%= profileUser.username.charAt(0).toUpperCase() %>
+        </div>
+      <% } %>
+    </div>
+    <div class="user-info">
+      <h3><%= profileUser.username %></h3>
+    </div>
+    <% if (user && user._id.toString() !== profileUser._id.toString()) { %>
+      <form action="/users/<%= profileUser._id %>/follow" method="POST">
+        <label class="ui-bookmark">
+          <% const isFollowing = user.following?.some(f => f._id.toString() === profileUser._id.toString()); %>
+          <input type="checkbox" name="followToggle" onchange="this.form.submit()" <%= isFollowing ? 'checked' : '' %> />
+          <div class="bookmark">
+            <svg viewBox="0 0 16 16" class="bi bi-heart-fill" height="25" width="25" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" fill-rule="evenodd"></path>
+            </svg>
+          </div>
+        </label>
+      </form>
+    <% } %>
+  </a>
