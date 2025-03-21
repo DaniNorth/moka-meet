@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compose Message</title>
+</head>
+<body>
+    <%- include('../partials/_navbar.ejs') %>
+
+    <h1>Compose Message</h1>
+
+    <form action="/messages/send" method="POST">
+        <label for="receiver">Select User:</label>
+        <select name="receiver" required>
+            <% mutualFollowers.forEach(follower => { %>
+                <option value="<%= follower._id %>"><%= follower.username %></option>
+            <% }) %>
+        </select>
+
+        <label for="messageText">Message:</label>
+        <textarea name="messageText" required></textarea>
+
+        <button type="submit">Send</button>
+    </form>
+
+</body>
+</html>
