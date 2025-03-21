@@ -3,37 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css" />
     <title>Reviews</title>
 </head>
 <body>
+    <div class="video-background">
+        <video autoplay muted loop playsinline class="background-video">
+          <source src="/css/assets/mokaMeetBackground.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+    </div>
     <%- include('../partials/_navbar.ejs') %>
 
-    <h1><%= isSelf ? "My Reviews" : profileUser.username + "'s Reviews" %></h1>
+    <div class="profile-container">
+      <div class="profile-section">
+        <h1><%= isSelf ? "My Reviews" : profileUser.username + "'s Reviews" %></h1>
 
-    <% if (reviews.length > 0) { %>
-        <% reviews.forEach(review => { %>
-            <div>
-                <h3><a href="/coffeeShops/<%= review.coffeeShopId._id %>">
-                    <%= review.coffeeShopId.name %>
-                </a></h3>
-                <p>Rating: <%= review.rating %>/5</p>
-                <p>Comment:<%= review.comment %></p>
+        <% if (reviews.length > 0) { %>
+          <% reviews.forEach(review => { %>
+            <div class="review-preview">
+              <h3><a href="/coffeeShops/<%= review.coffeeShopId._id %>"><%= review.coffeeShopId.name %></a></h3>
+              <p class="rating">Rating: <%= review.rating %>/5</p>
+              <p><%= review.comment %></p>
 
-                <% if (isSelf) { %>
-                    <a href="/coffeeShops/<%= review.coffeeShopId._id %>/reviews/<%= review._id %>/edit">
-                      <button>Edit</button>
-                    </a>
-            
-                    <form
-                      action="/coffeeShops/<%= review.coffeeShopId._id %>/reviews/<%= review._id %>?_method=DELETE"
-                      method="POST"
-                    ><button type="submit">Delete</button>
-                    </form>
-                <% } %>
+              <% if (isSelf) { %>
+                <div class="review-buttons-row">
+                  <a href="/coffeeShops/<%= review.coffeeShopId._id %>/reviews/<%= review._id %>/edit">
+                    <button class="learn-more">Edit</button>
+                  </a>
+
+                  <form
+                    action="/coffeeShops/<%= review.coffeeShopId._id %>/reviews/<%= review._id %>?_method=DELETE"
+                    method="POST"
+                  >
+                    <button type="submit" class="learn-more">Delete</button>
+                  </form>
+                </div>
+              <% } %>
             </div>
-        <% }) %>
-    <% } else { %>
-        <p>No reviews yet.</p>
-    <% } %>
+          <% }) %>
+        <% } else { %>
+          <p>No reviews yet.</p>
+        <% } %>
+      </div>
+    </div>
 </body>
 </html>
