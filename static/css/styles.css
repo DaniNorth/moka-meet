@@ -1,0 +1,136 @@
+:root {
+  /* Primary Palette */
+  --color-mocha-brown: #843505;     /* Deep Mocha Brown from logo */
+  --color-cream-beige: #E0C1AE;     /* Warm Beige from logo */
+  --color-soft-caramel: #984705;    /* Caramel Orange-Brown */
+  --color-espresso-black: #000000;  /* Deep black */
+
+  /* Accent Colors */
+  --color-sage-green: #A3B18A;      /* Calming plant-like tone */
+  --color-rose-dust-pink: #EED6D3;  /* Light, sweet pink */
+  --color-iced-blue: #BCCCDC;       /* Optional cool contrast */
+  --color-light-beige: #E3C3B0;     /* Soft neutral beige */
+  --color-dark-green: #384849;      /* Dark Green from logo */
+
+  /* Text & UI */
+  --color-text-primary: var(--color-espresso-black);
+  --color-text-secondary: var(--color-mocha-brown);
+  --color-background: var(--color-cream-beige);
+  --color-border: var(--color-soft-caramel);
+  --color-accent: var(--color-dark-green); /* Use the dark green for accents */
+
+  }
+
+  button {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    outline: none;
+    border: 0;
+    vertical-align: middle;
+    text-decoration: none;
+    font-family: inherit;
+    font-size: 15px;
+  }
+  
+  /* 🔥 Updated Button for Moka Meet */
+  button.learn-more {
+    font-weight: 600;
+    color: var(--color-mocha-brown); /* Espresso-like brown */
+    text-transform: uppercase;
+    padding: 1.25em 2em;
+    background: var(--color-cream-beige); /* Warm beige */
+    border: 2px solid var(--color-soft-caramel);
+    border-radius: 0.75em;
+    transform-style: preserve-3d;
+    transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), background 150ms cubic-bezier(0, 0, 0.58, 1);
+  }
+  
+  /* 👇 The shadow effect */
+  button.learn-more::before {
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--color-light-beige);
+    border-radius: inherit;
+    box-shadow: 0 0 0 2px var(--color-soft-caramel), 0 0.625em 0 0 var(--color-espresso-black);
+    transform: translate3d(0, 0.75em, -1em);
+    transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
+  }
+  
+  /* ✨ Hover Effect */
+  button.learn-more:hover {
+    background: var(--color-rose-dust-pink);
+    transform: translate(0, 0.25em);
+  }
+  
+  button.learn-more:hover::before {
+    box-shadow: 0 0 0 2px var(--color-soft-caramel), 0 0.5em 0 0 var(--color-espresso-black);;
+    transform: translate3d(0, 0.5em, -1em);
+  }
+  
+  /* 🎯 Click (Active) Effect */
+  button.learn-more:active {
+    background: var(--color-soft-caramel);
+    transform: translate(0em, 0.75em);
+  }
+  
+  button.learn-more:active::before {
+    box-shadow: 0 0 0 2px var(--color-soft-caramel), 0 0 var(--color-dark-green);
+    transform: translate3d(0, 0, -1em);
+  }
+.card {
+  background-color: white;
+  border: 2px solid var(--color-border);
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+/* Make the header responsive on all screen sizes */
+.homepage-header {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* Or whatever height you prefer */
+  overflow: hidden;
+}
+  
+  /* Ensure the video scales properly */
+  .background-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 100%;
+    width: auto;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
+  }
+  /* Overlay container for content (navbar) */
+  .header-overlay {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3); /* optional: adds dark tint */
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 2rem;
+  }
+  
+  /* Responsive tweaks */
+  @media (max-width: 768px) {
+    .homepage-header {
+      height: 100vh;
+    }
+  
+    .background-video {
+      transform: translate(-50%, -50%) scale(0.90);
+    }
+  }
