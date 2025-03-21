@@ -3,28 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css" />
     <title>Lists</title>
 </head>
 <body>
+    <div class="video-background">
+        <video autoplay muted loop playsinline class="background-video">
+          <source src="/css/assets/mokaMeetBackground.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+    </div>
+
     <%- include('../partials/_navbar.ejs') %>
 
     <h1><%= isSelf ? "My Lists" : profileUser.username + "'s Lists" %></h1>
 
-    <h2>Visited</h2>
-    <% (isSelf ? user.lists.visited : profileUser.lists.visited).forEach(shop => { %>
-        <p><a href="/coffeeShops/<%= shop._id %>"><%= shop.name %></a> - <%= shop.city %></p>
-    <% }) %>
+    <div class="profile-section">
+      <h2>Visited</h2>
+      <div class="card-grid">
+        <% (isSelf ? user.lists.visited : profileUser.lists.visited).forEach(shop => { %>
+          <%- include('../partials/_coffeeCard.ejs', { shop, user: isSelf ? user : profileUser }) %>
+        <% }) %>
+      </div>
+    </div>
 
-    <h2>Wishlist</h2>
-    <% (isSelf ? user.lists.wishlist : profileUser.lists.wishlist).forEach(shop => { %>
-        <p><a href="/coffeeShops/<%= shop._id %>"><%= shop.name %></a> - <%= shop.city %></p>
-    <% }) %>
+    <div class="profile-section">
+      <h2>Wishlist</h2>
+      <div class="card-grid">
+        <% (isSelf ? user.lists.wishlist : profileUser.lists.wishlist).forEach(shop => { %>
+          <%- include('../partials/_coffeeCard.ejs', { shop, user: isSelf ? user : profileUser }) %>
+        <% }) %>
+      </div>
+    </div>
 
     <% if (isSelf) { %>
+      <div class="profile-section">
         <h2>Removed</h2>
-        <% user.lists.removed.forEach(shop => { %>
-            <p><a href="/coffeeShops/<%= shop._id %>"><%= shop.name %></a> - <%= shop.city %></p>
-        <% }) %>
+        <div class="card-grid">
+          <% user.lists.removed.forEach(shop => { %>
+            <%- include('../partials/_coffeeCard.ejs', { shop, user }) %>
+          <% }) %>
+        </div>
+      </div>
     <% } %>
 </body>
 </html>
