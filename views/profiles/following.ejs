@@ -18,14 +18,11 @@
     <h1><%= profileUser.username %> Follows</h1>
 
     <% if (profileUser.following && profileUser.following.length > 0) { %>
-        <% profileUser.following.forEach(followedUser => { %>
-            <div>
-                <% if (followedUser.profilePic) { %>
-                    <img src="<%= followedUser.profilePic %>" alt="Profile Picture" width="50">
-                <% } %>
-                <p><a href="/users/<%= followedUser._id %>"><%= followedUser.username %></a></p>
-            </div>
-        <% }) %>
+        <div class="user-grid">
+            <% profileUser.following.forEach(followedUser => { %>
+                <%- include('../partials/_userCard', { profileUser: followedUser, user }) %>
+            <% }) %>
+        </div>
     <% } else { %>
         <p><%= profileUser.username %> is not following anyone yet.</p>
     <% } %>
