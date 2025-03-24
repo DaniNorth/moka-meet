@@ -39,9 +39,9 @@ The idea for Moka Meet came from my own experiences socializing at coffee shopsâ
 
 ## ðŸŽ¨ Attributions  
 - **UI Components from Uiverse.io**:  
-  - [Spotty Goose](https://uiverse.io/mi-series/spotty-goose-56)  
-  - [Terrible Catfish](https://uiverse.io/Madflows/terrible-catfish-72)  
-  - [Hot Panther](https://uiverse.io/Tsiangana/hot-panther-73)  
+  - [mi-series](https://uiverse.io/mi-series/spotty-goose-56)  
+  - [Madflows](https://uiverse.io/Madflows/terrible-catfish-72)  
+  - [Tsiangana](https://uiverse.io/Tsiangana/hot-panther-73)  
 - **Logo Design**: Canva  
 - **Assistance with Development**: ChatGPT  
 
